@@ -1,5 +1,9 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter, withRouterConfig } from '@angular/router';
+import {
+  provideRouter,
+  withRouterConfig,
+  withComponentInputBinding,
+} from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -7,7 +11,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(
       routes,
-      withRouterConfig({ paramsInheritanceStrategy: 'always' })
+      withRouterConfig({ paramsInheritanceStrategy: 'always' }),
+      withComponentInputBinding()
     ),
     provideHttpClient(),
   ],

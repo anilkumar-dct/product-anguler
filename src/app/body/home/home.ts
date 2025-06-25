@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { HttpService } from '../../httpServices/http-service';
+import { RouterLink } from '@angular/router';
 export interface Product {
   id: number;
   title: string;
@@ -44,11 +45,14 @@ export interface Review {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
+  openModal(_t3: Product) {
+    throw new Error('Method not implemented.');
+  }
   displayedProducts: Product[] = [];
   loading = false;
   limit = 10;

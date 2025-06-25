@@ -2,7 +2,7 @@
   @if (displayedProducts.length > 0) {
   <ng-container>
     @for (product of displayedProducts; track product.id) {
-    <div class="product-card">
+    <a routerLink="/product-details/{{ product.id }}" class="product-card">
       <img
         [src]="product.thumbnail"
         alt="{{ product.title }}"
@@ -13,7 +13,7 @@
         ${{ product.price }}
         <span class="product-discount">-{{ product.discountPercentage }}%</span>
       </p>
-    </div>
+    </a>
     }
   </ng-container>
   } @else {

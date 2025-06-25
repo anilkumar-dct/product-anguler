@@ -9,6 +9,13 @@ export const routes: Routes = [
     loadComponent: () => import('../body/home/home').then((m) => m.Home),
   },
   {
+    path: 'product-details/:productId',
+    loadComponent: () =>
+      import('../body/home/product-details/product-details').then(
+        (m) => m.ProductDetails
+      ),
+  },
+  {
     path: 'checkout',
     loadComponent: () =>
       import('../body/check-out/check-out').then((m) => m.CheckOut),

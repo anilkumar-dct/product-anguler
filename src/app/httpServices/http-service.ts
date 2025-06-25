@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Product } from '../body/home/home';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,5 +14,10 @@ export class HttpService {
         return error;
       })
     );
+  }
+  getProuductById(id: number): Observable<Product> {
+    return this.http
+      .get<Product>(this.baseUrl + '/' + id)
+      .pipe(catchError((error) => throwError(() => error)));
   }
 }

@@ -1,1 +1,56 @@
-<p>product-details works!</p>
+@if (selectedProduct) {
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeModal()">×</button>
+    <div class="modal-body">
+      <div class="modal-left">
+        <img
+          [src]="selectedProduct.thumbnail"
+          alt="Product"
+          class="modal-image"
+        />
+      </div>
+      <div class="modal-right">
+        <h2 class="modal-title">{{ selectedProduct.title }}</h2>
+        <p class="modal-description">{{ selectedProduct.description }}</p>
+
+        <div class="modal-rating">
+          <span class="rating-stars">
+            ★★★★★
+            <span
+              class="rating-fill"
+              [style.width.%]="selectedProduct.rating * 20"
+            >
+              ★★★★★
+            </span>
+          </span>
+          <span class="rating-value">({{ selectedProduct.rating }})</span>
+        </div>
+
+        <p class="modal-price">
+          ${{ selectedProduct.price }}
+          <span class="modal-discount"
+            >-{{ selectedProduct.discountPercentage }}%</span
+          >
+        </p>
+
+        <div class="quantity-control">
+          <button (click)="decreaseQty()">−</button>
+          <span>{{ quantity }}</span>
+          <button (click)="decreaseQty()">+</button>
+        </div>
+
+        <div class="modal-actions">
+          <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+          <button
+            class="add-btn"
+            (click)="addToCart(selectedProduct, quantity)"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
