@@ -1,1 +1,28 @@
-<p>home works!</p>
+<div class="product-list">
+  @if (displayedProducts.length > 0) {
+  <ng-container>
+    @for (product of displayedProducts; track product.id) {
+    <div class="product-card">
+      <img
+        [src]="product.thumbnail"
+        alt="{{ product.title }}"
+        class="product-image"
+      />
+      <h3 class="product-title">{{ product.title }}</h3>
+      <p class="product-price">
+        ${{ product.price }}
+        <span class="product-discount">-{{ product.discountPercentage }}%</span>
+      </p>
+    </div>
+    }
+  </ng-container>
+  } @else {
+  <p>No products available.</p>
+  }
+</div>
+
+@if (loading) {
+<div class="loader">
+  <div class="spinner"></div>
+</div>
+}
