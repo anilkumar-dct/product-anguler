@@ -2,6 +2,7 @@ import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { HttpService } from '../../httpServices/http-service';
 import { RouterLink } from '@angular/router';
 export interface Product {
+  quantity: any;
   id: number;
   title: string;
   description: string;

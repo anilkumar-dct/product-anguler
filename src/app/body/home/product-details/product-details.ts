@@ -1,6 +1,9 @@
-import { Component, input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Input, signal } from '@angular/core';
 import { Product } from '../home';
 import { HttpService } from '../../../httpServices/http-service';
+import { Location } from '@angular/common';
+import { CartService } from '../../../cartService';
+
 @Component({
   selector: 'app-product-details',
   imports: [],
@@ -8,26 +11,39 @@ import { HttpService } from '../../../httpServices/http-service';
   styleUrl: './product-details.css',
 })
 export class ProductDetails implements OnInit {
-  productId = input.required<string>();
+  @Input({ required: true }) productId!: string;
   selectedProduct: Product | null = null;
-  quantity = 1;
-
+  quantity = signal<number>(1);
+  private cart = inject(CartService);
   private httpServices = inject(HttpService);
+  private location = inject(Location);
 
   ngOnInit() {
     console.log(this.productId);
-    this.httpServices.getProuductById(+this.productId).subscribe((data) => {
-      this.selectedProduct = data;
-    });
+    if (this.productId) {
+      this.httpServices
+        .getProuductById(parseInt(this.productId))
+        .subscribe((data) => {
+          this.selectedProduct = data;
+        });
+    }
     console.log(this.selectedProduct);
   }
   addToCart(arg0: Product, arg1: any) {
-    throw new Error('Method not implemented.');
+    const value: number = arg1();
+    this.cart.product.push({ ...arg0, quantity: value });
+    this.closeModal();
   }
   decreaseQty() {
-    throw new Error('Method not implemented.');
+    if (this.quantity() > 1) {
+      this.quantity.update((value) => value - 1);
+    }
+  }
+  increaseQty() {
+    this.quantity.update((value) => value + 1);
   }
   closeModal() {
-    throw new Error('Method not implemented.');
+    this.selectedProduct = null;
+    this.location.back();
   }
 }

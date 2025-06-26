@@ -36,8 +36,8 @@
 
         <div class="quantity-control">
           <button (click)="decreaseQty()">−</button>
-          <span>{{ quantity }}</span>
-          <button (click)="decreaseQty()">+</button>
+          <span>{{ quantity() }}</span>
+          <button (click)="increaseQty()">+</button>
         </div>
 
         <div class="modal-actions">

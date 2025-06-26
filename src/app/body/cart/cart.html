@@ -1,1 +1,30 @@
-<p>cart works!</p>
+<div class="cart-container">
+  <h2>Your Cart</h2>
+
+  @if (cartItems().length === 0) {
+  <div class="empty-cart">
+    <p>Your cart is empty 😔</p>
+    <button class="shop-now">Shop Now</button>
+  </div>
+  } @else { @for (item of cartItems(); track item.id) {
+  <div class="cart-item">
+    <img [src]="item.thumbnail" alt="{{ item.title }}" />
+    <div class="item-details">
+      <h4>{{ item.title }}</h4>
+      <p>Price: ₹{{ item.price }}</p>
+      <div class="qty-controls">
+        <button (click)="decreaseQty(item)">−</button>
+        <span>{{item.quantity }}</span>
+        <button (click)="increaseQty(item)">+</button>
+      </div>
+      <button (click)="removeItem(item)" class="remove">Remove</button>
+    </div>
+  </div>
+  }
+
+  <div class="cart-summary">
+    <h3>Total: ₹{{ getTotal() }}</h3>
+    <button class="checkout">Proceed to Checkout</button>
+  </div>
+  }
+</div>
