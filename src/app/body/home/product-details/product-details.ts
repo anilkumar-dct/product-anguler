@@ -3,6 +3,7 @@ import { Product } from '../home';
 import { HttpService } from '../../../httpServices/http-service';
 import { Location } from '@angular/common';
 import { CartService } from '../../../cartService';
+import { ProductService } from '../product-service';
 
 @Component({
   selector: 'app-product-details',
@@ -12,22 +13,25 @@ import { CartService } from '../../../cartService';
 })
 export class ProductDetails implements OnInit {
   @Input({ required: true }) productId!: string;
-  selectedProduct: Product | null = null;
+  showSelectProduct: Product | null = null;
+  private product = inject(ProductService);
   quantity = signal<number>(1);
   private cart = inject(CartService);
   private httpServices = inject(HttpService);
   private location = inject(Location);
 
   ngOnInit() {
-    console.log(this.productId);
-    if (this.productId) {
-      this.httpServices
-        .getProuductById(parseInt(this.productId))
-        .subscribe((data) => {
-          this.selectedProduct = data;
-        });
+    const id = parseInt(this.productId);
+    const cached = this.product.selectedProductCache().find((p) => p.id === id);
+    if (cached) {
+      this.showSelectProduct = cached;
+      console.log('cached');
+    } else {
+      this.httpServices.getProuductById(id).subscribe((data) => {
+        this.showSelectProduct = data;
+        this.product.selectedProductCache().push(data);
+      });
     }
-    console.log(this.selectedProduct);
   }
   addToCart(arg0: Product, arg1: any) {
     const value: number = arg1(); // new quantity to add
@@ -63,7 +67,6 @@ export class ProductDetails implements OnInit {
     this.quantity.update((value) => value + 1);
   }
   closeModal() {
-    this.selectedProduct = null;
     this.location.back();
   }
 }

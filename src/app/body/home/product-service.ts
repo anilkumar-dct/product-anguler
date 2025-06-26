@@ -9,7 +9,7 @@ import { Product } from './home';
 export class ProductService implements OnDestroy {
   private httpService = inject(HttpService);
   private displayedProducts = signal<Product[]>([]); // Initialize with an empty array of product[]>([]);
-
+  selectedProductCache = signal<Product[]>([]);
   // Expose as readonly signal for consumers
   readonly allproduct = this.displayedProducts.asReadonly();
 
