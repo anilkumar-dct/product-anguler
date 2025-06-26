@@ -1,7 +1,7 @@
 <div class="product-list">
-  @if (displayedProducts.length > 0) {
+  @if (productService.allproduct().length > 0) {
   <ng-container>
-    @for (product of displayedProducts; track product.id) {
+    @for (product of productService.allproduct(); track product.id) {
     <a routerLink="/product-details/{{ product.id }}" class="product-card">
       <img
         [src]="product.thumbnail"

@@ -30,10 +30,30 @@ export class ProductDetails implements OnInit {
     console.log(this.selectedProduct);
   }
   addToCart(arg0: Product, arg1: any) {
-    const value: number = arg1();
-    this.cart.product.push({ ...arg0, quantity: value });
+    const value: number = arg1(); // new quantity to add
+    const currentCart = this.cart.product(); // existing cart items
+
+    const index = currentCart.findIndex((p) => p.id === arg0.id);
+    let updatedCart: Product[];
+
+    if (index !== -1) {
+      // Product exists; add to existing quantity
+      const existingProduct = currentCart[index];
+      const newQuantity = (existingProduct.quantity || 0) + value;
+
+      updatedCart = [...currentCart];
+      updatedCart[index] = { ...existingProduct, quantity: newQuantity };
+    } else {
+      // New product to add
+      updatedCart = [...currentCart, { ...arg0, quantity: value }];
+    }
+
+    // Update cart
+    this.cart.product.set(updatedCart);
+
     this.closeModal();
   }
+
   decreaseQty() {
     if (this.quantity() > 1) {
       this.quantity.update((value) => value - 1);

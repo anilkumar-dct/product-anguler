@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { CartService } from '../../cartService';
 import { Product } from '../home/home';
 
@@ -11,9 +11,11 @@ import { Product } from '../home/home';
 export class Cart implements OnInit {
   private cart = inject(CartService);
   cartItems = signal<Product[]>([]);
-
+  private syncc = effect(() => {
+    this.cartItems.set(this.cart.product());
+  });
   ngOnInit() {
-    this.cartItems.set(this.cart.product);
+    this.cartItems.set(this.cart.product());
   }
 
   getTotal(): number {
@@ -30,21 +32,15 @@ export class Cart implements OnInit {
   }
 
   increaseQty(_t6: Product) {
-    this.cartItems.update((items) =>
+    this.cart.product.update((items) =>
       items.map((item) =>
         item.id === _t6.id ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   }
 
-  /*************  ✨ Windsurf Command ⭐  *************/
-  /**
-   * Decrease the quantity of the given item in the cart by 1. If the quantity is 1, do nothing.
-   * @param _t6 - The item to decrease the quantity of.
-   */
-  /*******  61691805-3fea-4ad6-9312-d5cea3065f45  *******/
   decreaseQty(_t6: Product) {
-    this.cartItems.update((items) =>
+    this.cart.product.update((items) =>
       items.map((item) =>
         item.id === _t6.id && item.quantity > 1
           ? { ...item, quantity: item.quantity - 1 }

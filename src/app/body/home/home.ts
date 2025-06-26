@@ -1,6 +1,14 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { HttpService } from '../../httpServices/http-service';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  effect,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ProductService } from './product-service';
+
 export interface Product {
   quantity: any;
   id: number;
@@ -51,45 +59,20 @@ export interface Review {
   styleUrl: './home.css',
 })
 export class Home implements OnInit, OnDestroy {
-  openModal(_t3: Product) {
-    throw new Error('Method not implemented.');
-  }
-  displayedProducts: Product[] = [];
-  loading = false;
-  limit = 10;
-  skip = 0;
-  hasMore = true;
+  productService = inject(ProductService);
 
-  private httpService = inject(HttpService);
+  loading = this.productService.loading;
 
-  ngOnInit() {
-    this.loadMore(); // Load first batch
-    window.addEventListener('scroll', this.onScroll, true);
-  }
-
-  loadMore() {
-    if (this.loading || !this.hasMore) return;
-
-    this.loading = true;
-    const url = `?limit=${this.limit}&skip=${this.skip}&select=title,price,thumbnail,discountPercentage`;
-
-    this.httpService.getAllProducts(url).subscribe((res) => {
-      this.displayedProducts.push(...res.products);
-      this.skip += this.limit;
-      this.hasMore = this.skip < res.total;
-      this.loading = false;
-    });
-  }
-
-  onScroll = () => {
-    const scrollBottom =
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
-    if (scrollBottom) {
-      this.loadMore();
+  ngOnInit(): void {
+    console.log('oninti');
+    if (this.productService.allproduct().length === 0) {
+      this.productService.loadMore();
     }
-  };
 
-  ngOnDestroy() {
-    window.removeEventListener('scroll', this.onScroll, true);
+    window.addEventListener('scroll', this.productService.onScroll, true);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('scroll', this.productService.onScroll, true);
   }
 }
