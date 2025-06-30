@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <div class="form-box">
+      <h2>Login</h2>
+      <form [formGroup]="form">
+        <div class="input-group">
+          <input type="text" formControlName="email" required />
+          <label>Email</label>
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            id="login-pass"
+            formControlName="password"
+            required
+          />
+          <label>Password</label>
+          <span class="toggle" onclick="toggleLoginPass()">👁️</span>
+        </div>
+        <button type="submit" (click)="login()">Login</button>
+      </form>
+    </div>
+
+    <script>
+      function toggleLoginPass() {
+        const input = document.getElementById("login-pass");
+        input.type = input.type === "password" ? "text" : "password";
+      }
+    </script>
+  </body>
+</html>

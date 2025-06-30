@@ -5,7 +5,12 @@ import {
   withComponentInputBinding,
 } from '@angular/router';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import { JwtInterceptor } from '../body/login-setup/sign-up/jwtIntcepter';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +19,11 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ paramsInheritanceStrategy: 'always' }),
       withComponentInputBinding()
     ),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()), // Enable DI-based interceptors
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    },
   ],
 };
